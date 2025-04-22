@@ -9,30 +9,30 @@ const Cards = () => {
   const [gameHistory, setGameHistory] = useState([]);
   const [showCards, setShowCards] = useState(true);
 
-  const suits = [
-    { name: "Spades", symbol: "♠️", power: 4 },
-    { name: "Hearts", symbol: "♥️", power: 3 },
-    { name: "Diamonds", symbol: "♦️", power: 2 },
-    { name: "Clubs", symbol: "♣️", power: 1 },
-  ];
-
-  const ranks = [
-    { card: "A", baseId: 13 },
-    { card: "K", baseId: 12 },
-    { card: "Q", baseId: 11 },
-    { card: "J", baseId: 10 },
-    { card: "10", baseId: 9 },
-    { card: "9", baseId: 8 },
-    { card: "8", baseId: 7 },
-    { card: "7", baseId: 6 },
-    { card: "6", baseId: 5 },
-    { card: "5", baseId: 4 },
-    { card: "4", baseId: 3 },
-    { card: "3", baseId: 2 },
-    { card: "2", baseId: 1 },
-  ];
-
   const cardDeck = useMemo(() => {
+    const suits = [
+      { name: "Spades", symbol: "♠️", power: 4 },
+      { name: "Hearts", symbol: "♥️", power: 3 },
+      { name: "Diamonds", symbol: "♦️", power: 2 },
+      { name: "Clubs", symbol: "♣️", power: 1 },
+    ];
+
+    const ranks = [
+      { card: "A", baseId: 13 },
+      { card: "K", baseId: 12 },
+      { card: "Q", baseId: 11 },
+      { card: "J", baseId: 10 },
+      { card: "10", baseId: 9 },
+      { card: "9", baseId: 8 },
+      { card: "8", baseId: 7 },
+      { card: "7", baseId: 6 },
+      { card: "6", baseId: 5 },
+      { card: "5", baseId: 4 },
+      { card: "4", baseId: 3 },
+      { card: "3", baseId: 2 },
+      { card: "2", baseId: 1 },
+    ];
+
     const deck = [];
     suits.forEach((suit, suitIndex) => {
       ranks.forEach((rank) => {
@@ -46,7 +46,7 @@ const Cards = () => {
       });
     });
     return deck;
-  }, [suits, ranks]);
+  }, []); 
 
   function shuffleDeck(deck) {
     for (let i = deck.length - 1; i > 0; i--) {
