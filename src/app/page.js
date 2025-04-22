@@ -56,7 +56,7 @@ const Cards = () => {
 
   useEffect(() => {
     setShuffledCardDeck(shuffleDeck([...cardDeck]));
-  }, []);
+  }, [cardDeck]);
 
   const computerPick = () => {
     if (shuffledCardDeck.length === 0) return null;
