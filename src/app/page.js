@@ -32,19 +32,21 @@ const Cards = () => {
     { card: "2", baseId: 1 },
   ];
 
-  const cardDeck = [];
-
-  suits.forEach((suit, suitIndex) => {
-    ranks.forEach((rank) => {
-      cardDeck.push({
-        card: `${rank.card}${suit.symbol}`,
-        suit: suit.name,
-        suitPower: suit.power,
-        id: rank.baseId + suitIndex * 13,
-        generalId: rank.baseId,
+  const cardDeck = useMemo(() => {
+    const deck = [];
+    suits.forEach((suit, suitIndex) => {
+      ranks.forEach((rank) => {
+        deck.push({
+          card: `${rank.card}${suit.symbol}`,
+          suit: suit.name,
+          suitPower: suit.power,
+          id: rank.baseId + suitIndex * 13,
+          generalId: rank.baseId,
+        });
       });
     });
-  });
+    return deck;
+  }, [suits, ranks]);
 
   function shuffleDeck(deck) {
     for (let i = deck.length - 1; i > 0; i--) {
