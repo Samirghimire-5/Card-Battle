@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 
 const Cards = () => {
   const [playerSelect, setPlayerSelect] = useState(null);
@@ -46,7 +46,7 @@ const Cards = () => {
       });
     });
     return deck;
-  }, []); 
+  }, []);
 
   function shuffleDeck(deck) {
     for (let i = deck.length - 1; i > 0; i--) {
@@ -58,7 +58,7 @@ const Cards = () => {
 
   useEffect(() => {
     setShuffledCardDeck(shuffleDeck([...cardDeck]));
-  }, [cardDeck]);
+  }, [cardDeck]); // Now cardDeck will only change if suits or ranks change
 
   const computerPick = () => {
     if (shuffledCardDeck.length === 0) return null;
