@@ -8,6 +8,8 @@ const Cards = () => {
   const [result, setResult] = useState(null);
   const [gameHistory, setGameHistory] = useState([]);
   const [showCards, setShowCards] = useState(true);
+  const [revealedCardId, setRevealedCardId] = useState(null);
+  const [roundOver, setRoundOver] = useState(false);
 
   const cardDeck = useMemo(() => {
     const suits = [
@@ -83,28 +85,51 @@ const Cards = () => {
     }
   };
 
-  const handleClick = (item) => {
-    setPlayerSelect(item);
-    const computerSelectedCard = computerPick();
+  const handleCardClick = (item) => {
+    if (playerSelect || roundOver) {
+      // If a card is already selected or the round is over, do nothing
+      return;
+    }
 
+    // Reveal the card first
+    setRevealedCardId(item.id);
+
+    // After a short delay, process the selection
     setTimeout(() => {
-      const comparisonResult = compareCard(item, computerSelectedCard);
-      setResult(comparisonResult);
-      setGameHistory([
-        {
-          playerCard: item,
-          computerCard: computerSelectedCard,
-          result: comparisonResult,
-        },
-        ...gameHistory,
-      ]);
-    }, 100);
+      setPlayerSelect(item);
+      const computerSelectedCard = computerPick();
+
+      setTimeout(() => {
+        const comparisonResult = compareCard(item, computerSelectedCard);
+        setResult(comparisonResult);
+        setGameHistory([
+          {
+            playerCard: item,
+            computerCard: computerSelectedCard,
+            result: comparisonResult,
+          },
+          ...gameHistory,
+        ]);
+        setRoundOver(true); // Mark the round as over
+        setRevealedCardId(null); // Hide the revealed card
+      }, 100);
+    }, 500);
+  };
+
+  const handleNextRoundClick = () => {
+    setPlayerSelect(null);
+    setComputerSelect(null);
+    setResult(null);
+    setRoundOver(false);
+    setShuffledCardDeck(shuffleDeck([...cardDeck]));
   };
 
   const restartGame = () => {
     setComputerSelect(null);
     setPlayerSelect(null);
     setResult(null);
+    setRevealedCardId(null);
+    setRoundOver(false);
     setShuffledCardDeck(shuffleDeck([...cardDeck]));
   };
 
@@ -171,6 +196,14 @@ const Cards = () => {
                 >
                   {result}
                 </div>
+              )}
+              {roundOver && (
+                <button
+                  className="mt-4 px-4 py-2 bg-green-500 hover:bg-green-600 rounded-md text-white font-semibold transition-all"
+                  onClick={handleNextRoundClick}
+                >
+                  Next Round
+                </button>
               )}
             </div>
 
@@ -255,29 +288,41 @@ const Cards = () => {
             const isHeartOrDiamond =
               item.suit === "Hearts" || item.suit === "Diamonds";
 
+            const isRevealed = revealedCardId === item.id;
+
             return (
               <div
                 key={item.id}
                 className={`relative flex flex-col justify-between items-center w-16 h-24 sm:w-20 sm:h-28 shadow-lg rounded-lg cursor-pointer transition-all duration-200
-    ${isSelected ? "opacity-50" : "hover:scale-110"}
+    ${isSelected || roundOver ? "opacity-50 cursor-not-allowed" : "hover:scale-110"}
     ${
-      isHeartOrDiamond
-        ? "bg-gradient-to-br from-red-100 to-red-200 text-red-600"
-        : "bg-gradient-to-br from-gray-100 to-gray-200 text-gray-800"
+      isRevealed || isSelected
+        ? isHeartOrDiamond
+          ? "bg-gradient-to-br from-red-100 to-red-200 text-red-600"
+          : "bg-gradient-to-br from-gray-100 to-gray-200 text-gray-800"
+        : "bg-gradient-to-br from-blue-600 to-blue-800 text-white"
     }
     ${playerSelect?.id === item.id ? "ring-4 ring-blue-500" : ""}
     ${computerSelect?.id === item.id ? "ring-4 ring-red-500" : ""}`}
-                onClick={!isSelected ? () => handleClick(item) : undefined}
+                onClick={!isSelected && !roundOver ? () => handleCardClick(item) : undefined}
               >
-                <span className="absolute top-1 left-1 text-xl font-bold p-1">
-                  {item.card.replace(/[♠️♥️♦️♣️]/g, "")}
-                </span>
-                <span className="absolute text-2xl top-10 ">
-                  {item.card.match(/[♠️♥️♦️♣️]/)[0]}
-                </span>
-                <span className="absolute bottom-1 right-1 text-xl font-bold p-1 transform rotate-180">
-                  {item.card.replace(/[♠️♥️♦️♣️]/g, "")}
-                </span>
+                {isRevealed || isSelected ? (
+                  <>
+                    <span className="absolute top-1 left-1 text-xl font-bold p-1">
+                      {item.card.replace(/[♠️♥️♦️♣️]/g, "")}
+                    </span>
+                    <span className="absolute text-2xl top-10">
+                      {item.card.match(/[♠️♥️♦️♣️]/)[0]}
+                    </span>
+                    <span className="absolute bottom-1 right-1 text-xl font-bold p-1 transform rotate-180">
+                      {item.card.replace(/[♠️♥️♦️♣️]/g, "")}
+                    </span>
+                  </>
+                ) : (
+                  <div className="flex items-center justify-center h-full w-full">
+                    <span className="text-4xl">?</span>
+                  </div>
+                )}
               </div>
             );
           })}
@@ -288,9 +333,9 @@ const Cards = () => {
       <div className="mt-8 bg-gray-800 p-4 rounded-lg max-w-lg text-center">
         <h3 className="text-xl font-bold mb-2 text-yellow-400">Game Rules</h3>
         <p className="text-gray-300">
-          Select a card to play against the computer. Higher card value wins. If
+          Select a card to reveal its value and play against the computer. Higher card value wins. If
           cards have the same value, suit power decides (♠️ '&gt;' ♥️ '&gt;' ♦️
-          '&gt;' ♣️).
+          '&gt;' ♣️). Click 'Next Round' to shuffle the cards and play again after a round ends.
         </p>
       </div>
     </div>

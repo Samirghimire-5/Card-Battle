@@ -1,4 +1,3 @@
-"use client"
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -12,7 +11,10 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-
+export const metadata = {
+  title: "Your Website Title",
+  description: "A brief description of your website.",
+};
 
 export default function RootLayout({ children }) {
   return (
