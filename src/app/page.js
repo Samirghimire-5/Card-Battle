@@ -210,7 +210,7 @@ const Cards = () => {
             {/* Computer Side */}
             <div className="flex flex-col items-center">
               <h2 className="text-xl font-bold mb-2 text-red-400">
-                Computer's Card
+                Computer&apos;s Card
               </h2>
               {computerSelect ? (
                 <div
@@ -244,7 +244,7 @@ const Cards = () => {
                   <tr className="border-b border-gray-700">
                     <th className="py-2">Round</th>
                     <th className="py-2">Your Card</th>
-                    <th className="py-2">Computer's Card</th>
+                    <th className="py-2">Computer&apos;s Card</th>
                     <th className="py-2">Result</th>
                   </tr>
                 </thead>
@@ -335,7 +335,7 @@ const Cards = () => {
         <p className="text-gray-300">
           Select a card to reveal its value and play against the computer. Higher card value wins. If
           cards have the same value, suit power decides (♠️ '&gt;' ♥️ '&gt;' ♦️
-          '&gt;' ♣️). Click 'Next Round' to shuffle the cards and play again after a round ends.
+          '&gt;' ♣️). Click &apos;Next Round&apos; to shuffle the cards and play again after a round ends.
         </p>
       </div>
     </div>
