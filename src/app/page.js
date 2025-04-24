@@ -334,8 +334,8 @@ const Cards = () => {
         <h3 className="text-xl font-bold mb-2 text-yellow-400">Game Rules</h3>
         <p className="text-gray-300">
           Select a card to reveal its value and play against the computer. Higher card value wins. If
-          cards have the same value, suit power decides (♠️ '&gt;' ♥️ '&gt;' ♦️
-          '&gt;' ♣️). Click &apos;Next Round&apos; to shuffle the cards and play again after a round ends.
+          cards have the same value, suit power decides (♠️ &gt; ♥️ &gt; ♦️
+          &gt; ♣️). Click &apos;Next Round&apos; to shuffle the cards and play again after a round ends.
         </p>
       </div>
     </div>
